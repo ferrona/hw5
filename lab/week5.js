@@ -53,7 +53,7 @@ window.addEventListener('DOMContentLoaded', async function() {
       <div class="text-center space-y-2">
         <div class="font-bold text-3xl">Current Weather for ${locationResult.name}, ${locationResult.region}</div>
         <div class="font-bold">
-          <img src="https://cdn.weatherapi.com/weather/64x64/day/116.png" class="inline-block">
+          <img src="https:${currentWeather.condition.icon}" class="inline-block">
           <span class="temperature">${currentWeather.temp_f}</span>° 
           and
           <span class="conditions">${currentWeather.condition.text}</span>
@@ -85,6 +85,13 @@ window.addEventListener('DOMContentLoaded', async function() {
     // - Store the interpreted days, and the forecast 
     let daysResult = json.forecast.forecastday
 
+    // - Add forecast title
+    let forecast = document.querySelector (`.forecast`)
+    forecast.innerHTML = `
+    <div class="text-center space-y-8">
+    <div class="font-bold text-3xl">${daysResult.length} Day Forecast</div>
+    </div>
+    `
     for (let i=0; i<daysResult.length; i++) {
       // Create a variable to store each forecast in memory
       let date = daysResult[i].date
@@ -92,25 +99,17 @@ window.addEventListener('DOMContentLoaded', async function() {
       let low = daysResult[i].day.mintemp_f
       let condition = daysResult[i].day.condition.text
       
-    let forecast = document.querySelector (`.forecast`)
-    forecast.innerHTML = `
+    
+    forecast.insertAdjacentHTML (`beforeend`, `
     <div class="text-center space-y-8">
-    <div class="font-bold text-3xl">${daysResult.length} Day Forecast</div>
     <div>
-      <img src="https://cdn.weatherapi.com/weather/64x64/day/116.png" class="mx-auto">
-      <h1 class="text-2xl text-bold text-gray-500">${date}</h1>
-      <h2 class="text-xl">High ${high}° – Low ${low}°</h2>
-      <p class="text-gray-500">${condition}</h1>
-    </div>
-
-    <div>
-      <img src="https://cdn.weatherapi.com/weather/64x64/day/116.png" class="mx-auto">
+      <img src="https:${daysResult[i].day.condition.icon}" class="mx-auto">
       <h1 class="text-2xl text-bold text-gray-500">${date}</h1>
       <h2 class="text-xl">High ${high}° – Low ${low}°</h2>
       <p class="text-gray-500">${condition}</h1>
     </div>
   </div>
-    `
+    `)
     }
 
     
